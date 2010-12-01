@@ -1,0 +1,47 @@
+What is SQLite
+SQLite is an Open Source, ACID-compliant embedded relational database management system.
+
+
+Advantages of SQLite
+- Zero-Configuration
+- Serverless (so no database server process)
+- Single Database File
+- Stable Cross-Platform Database File
+- The most used database in the world (Firefox, Thunderbird, iOS, 
+- Weakly typed (like Perl! :) )
+
+
+Disadvantages of SQLite
+- Serverless
+- Zero-Configuration
+- Not scalable (serverless, single file...)
+- Missing/incomplete features:
+  - Triggers (only partial support)
+  - Views (read only)
+
+Interfaces:
+- Commandline: sqlite3
+- Perl: DBD::SQLite
+
+
+
+What is ACID?
+Atomicity
+  Each transaction is said to be atomic.
+  If one part of the transaction fails, the entire transaction fails
+Consistency
+  The consistency property ensures that any transaction the database
+  performs will take it from one consistent state to another.
+  e.g. only integers allowed in integer fields
+  e.g. propper rollback functionality
+Isolation
+  Isolation refers to the requirement that other operations cannot access
+  data that has been modified during a transaction that has not yet completed.
+  row locking, table locking
+Durability
+  Durability is the ability of the DBMS to recover the committed
+  transaction updates against any kind of system failure (hardware
+  or software).
+  Transaction log / Journal
+
+

@@ -9,18 +9,29 @@ use Memory::Usage;
 use YAML::Any qw/Dump/;
 use Data::Dumper;
 use utf8;
+use File::Spec::Functions;
 
 sub new{
     my $class = shift;
-    my $xml_file = shift;
-    if( ! $xml_file ){
-        die( "XML file not defined\n" );
-    }
-    if( ! -f $xml_file ){
-        die( "XML file does not exist\n" );
-    }
+    my $args = shift;
+
     my $self = {};
-    $self->{xml_file} = $xml_file;
+    foreach( qw/xml_file out_dir/ ){
+        if( ! $args->{$_} ){
+            die( "$_ is a required argument\n" );
+        }
+        $self->{$_} = $args->{$_};
+    }
+
+    if( ! -f $args->{xml_file} ){
+        die( "File $args->{xml_file} does not exist\n" );
+    }
+
+    if( ! -d $args->{out_dir} ){
+        die( "Dir $args->{out_dir} does not exist\n" );
+    }
+
+
     $self->{out_fmt} = "%-10s %-10s %-10s %s\n";
 
     $self->{mu} = Memory::Usage->new();
@@ -82,7 +93,7 @@ sub test_smart{
     }
 
     # Open the file for output - we know our source is in utf8
-    my $fh = IO::File->new( 'output_smart.txt', 'w' );
+    my $fh = IO::File->new( catfile( $self->{out_dir}, 'output_smart.txt' ), 'w' );
     $fh->binmode(':encoding(UTF-8)');
 
     # We know that the Filme section should be an array(ref)
@@ -105,7 +116,7 @@ sub test_twig{
     my $self = shift;
 
     # Open the file for output - we know our source is in utf8
-    my $fh = IO::File->new( 'output_twig.txt', 'w' );
+    my $fh = IO::File->new( catfile( $self->{out_dir}, 'output_twig.txt' ), 'w' );
     $fh->binmode( ':encoding(UTF-8)' );
 
     my $twig = XML::Twig->new(
@@ -146,7 +157,7 @@ sub parse_filme{
 sub test_simple{
     my $self = shift;
 
-    my $fh = IO::File->new( 'output_simple.txt', 'w' );
+    my $fh = IO::File->new( catfile( $self->{out_dir}, 'output_simple.txt' ), 'w' );
     $fh->binmode( ':encoding(UTF-8)' );
 
     #XML::Simple does not work with Devel::DProf ... :-(
@@ -171,7 +182,7 @@ sub test_xmlparser{
     my $self = shift;
 
     # Open the file for output - we know our source is in utf8
-    my $fh = IO::File->new( 'output_xmlparser.txt', 'w' );
+    my $fh = IO::File->new( catfile( $self->{out_dir}, 'output_xmlparser.txt' ), 'w' );
     $fh->binmode( ':encoding(UTF-8)' );
 
     # initialize parser and read the file

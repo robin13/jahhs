@@ -16,7 +16,6 @@ use XML::Simple;
 use XML::Twig;
 use XML::Parser;
 use Memory::Usage;
-use YAML::Any qw/Dump/;
 use File::Spec::Functions;
 use Time::HiRes qw/time/;
 

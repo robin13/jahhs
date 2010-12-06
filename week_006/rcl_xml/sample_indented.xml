@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Mediathek>
+    <Filmliste>
+        <Filmliste-Datum>05.12.2010, 12:56
+        </Filmliste-Datum>
+        <Filmliste-Nur-Zeit>12:56:45
+        </Filmliste-Nur-Zeit>
+        <Filmliste-Nur-Datum>05.12.2010
+        </Filmliste-Nur-Datum>
+        <Filmliste-Anzahl>33393
+        </Filmliste-Anzahl>
+    </Filmliste>
+    <Filme>
+        <Nr>000000
+        </Nr>
+        <Sender>3Sat
+        </Sender>
+        <Thema>3Sat
+        </Thema>
+        <Titel>Bauerfeind im November
+        </Titel>
+        <Url>http://wstreaming.zdf.de/3sat/veryhigh/101103_nt_bauerfeind_promo.asx
+        </Url>
+        <UrlOrg>http://wstreaming.zdf.de/3sat/veryhigh/101103_nt_bauerfeind_promo.asx
+        </UrlOrg>
+        <Datei>101103_nt_bauerfeind_promo.asx
+        </Datei>
+        <Film-alt>false
+        </Film-alt>
+    </Filme>
+</Mediathek>

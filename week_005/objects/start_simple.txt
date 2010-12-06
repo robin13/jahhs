@@ -1,0 +1,72 @@
+Ein (natives) perl-objekt ist eine Referenz,
+die weiß, wie sie mit Methoden umgehen muss.
+
+Eine PERL-Klasse ist ein package.
+
+Mit 「bless」 kann man Referenzen an einen Packetnamen binden.
+Eine print (bzw stringify) mit einer solchen referenz auf bar geblesst sieht dann so aus:
+
+bar=SCALAR(0xd992a8)
+
+Wenn das passiert ist, wird bei einem Methodenaufruf
+erst das Package nach der Subroutine durchsucht, an die das Objekt
+gebunden ist, dann alle Packages, die im @ISA Array des Packetes stehen
+(rekursiv (depth first)).
+
+Eine Objektmethode ist eine Subroutine der als ersten Parameter das Objekt
+übergeben wird.
+
+sub obj_methode {
+  my $self = shift;
+  $self->{'ein feld'} # Beispiel
+}
+
+Analoges gilt für die Klassenmethoden.
+sub cls_method {
+  my $package = shift;
+  …  
+}
+
+
+Syntax:
+  Methoden:
+    $objekt->methode(@parameter);
+    methode $objekt(@parameter);  #nicht!
+
+Klassen Methoden (static in java, in perl aber auch die Konstruktoren!!!);
+
+    Klasse->methode(@parameter);
+    methode Klasse(@parameter);
+
+perldoc einträge:
+
+
+perlobj  Referenz
+perltoot Tutorial
+perlbot  Tricks
+perlboot (hab ich selber nie angeschaut, wird aber mitempfohlen)
+
+#!/usr/bin/perl
+# Dieses Skript kann man mit perl -x ausführen
+use 5.01;
+
+package Eins;
+our @ISA = qw(Zwei Drei);
+
+package Zwei;
+our @ISA = qw(Vier);
+
+package Drei;
+sub hallo {say 'Drei';}
+
+package Vier;
+sub hallo {say 'Vier';}
+
+package main;
+my $word = 'foo';
+my $obj = bless \$word,'Eins';
+hallo $obj;
+
+my @ary = map {bless sub{say $_},$_} qw(Eins Zwei Drei Vier);
+
+#hallo $ary[0]; #Error! Wird angeblich zu $ary->hallo([0]) ausgewertet 

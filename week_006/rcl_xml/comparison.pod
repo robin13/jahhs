@@ -1,0 +1,158 @@
+=pod
+
+=head1 XML Parsing modules
+
+=head2 XML::Parser
+
+Last update: 2010
+
+A perl module for parsing XML documents 
+
+=head3 Advantages:
+
+=over 1
+
+=item *
+
+Fast
+
+=item *
+
+Lots of different options/styles
+
+=back
+
+=head3 Disadvantages
+
+=over 1
+
+=item *
+
+Very complex module - difficult to "get into"
+
+=item *
+
+Only parsing: no XML output
+
+=item *
+
+Memory hog! (if using "Tree" style - other styles may be better)
+
+=back
+
+=head2 XML::Simple
+
+Easy API to maintain XML (esp config files)
+
+Last update: 2007
+
+=head3 Advantages:
+
+=over 1
+
+=item *
+
+Fast!
+
+=item *
+
+In- and output of XML files
+
+=item *
+
+Nice data structure from XML
+
+=back
+
+=head3 Disadvantages
+
+=over 1
+
+=item *
+
+Not that many options: it is I<simple>
+
+=item *
+
+Memory hog!
+
+=item *
+
+Does not work with Devel::DProf - segmentation fault...
+
+=back
+
+
+=head2 XML::Twig
+
+A perl module for processing huge XML documents in tree mode.  Based on libxml
+
+Last update: 2010
+
+=head3 Advantages:
+
+=over 1
+
+=item *
+
+Processing in tree mode: memory usage is controllable, but needs regular purging of branches keep it from growing!
+
+=back
+
+=head3 Disadvantages
+
+=over 1
+
+=item *
+
+Have experienced segmentation faults when used with Memory::Usage... not so stable?
+
+=item *
+
+Only input, no output
+
+=item *
+
+Not the fastest...
+
+=back
+
+
+
+
+=head2 XML::Smart
+
+A smart, easy and powerful way to access/create XML files/data.
+
+Last update: 2004
+
+=head3 Advantages:
+
+=over 1
+
+=item *
+
+
+=back
+
+=head3 Disadvantages
+
+=over 1
+
+=item *
+
+Not so smart
+
+=item *
+
+Very slow
+
+=item *
+
+Memory hog!
+
+=back
+
+
+
+=back

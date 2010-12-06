@@ -1,21 +1,32 @@
 package XMLTester;
 use strict;
 use warnings;
+
+# This is an XML processor benchmarker.
+# XML parsers can be tested against each other to compare their respective processing time
+# and memory usage
+# A standard XML is taken as input (see sample_[small|medium|big].xml for the input
+# The "Filme" elements are processed and a sub-section of this element is printed out to
+# a csv file for each processor.
+# This is a fairly simple, and so repeatable processing step which should make comparison
+# of the processing effectiveness and output meaningful and relatable to real-life systems.
+
 use XML::Smart;
 use XML::Simple;
 use XML::Twig;
 use XML::Parser;
 use Memory::Usage;
 use YAML::Any qw/Dump/;
-use Data::Dumper;
-use utf8;
 use File::Spec::Functions;
+use Time::HiRes qw/time/;
 
 sub new{
     my $class = shift;
     my $args = shift;
 
     my $self = {};
+    bless $self, $class;
+
     foreach( qw/xml_file out_dir/ ){
         if( ! $args->{$_} ){
             die( "$_ is a required argument\n" );
@@ -34,10 +45,10 @@ sub new{
 
     $self->{out_fmt} = "%-10s %-10s %-10s %s\n";
 
-    $self->{mu} = Memory::Usage->new();
+    $self->{use_mu} = $args->{use_mu} || 0;
+    $self->{mu} = $self->mu();
     $self->{mu}->record( 'XMLTester START' );
 
-    bless $self, $class;
     return $self;
 }
 
@@ -47,14 +58,16 @@ sub run{
 
     # If no test list passed, test all
     if( scalar( @test_list ) == 0 ){
-        @test_list =  qw/xmlparser twig smart libxml simple/;
+        @test_list =  qw/xmlparser twig smart simple/; # libxml
     }
 
 
     my %returns;
+    my %times;
     foreach( @test_list ){
         print "Starting test_$_\n";
         $self->{mu}->record( "test_$_ START" );
+        my $time_start = time();
         if( $_ eq 'twig' ){
             $returns{$_} = $self->test_twig();
         }elsif( $_ eq 'smart' ){
@@ -68,11 +81,13 @@ sub run{
         }else{
             die( "No test named $_\n" );
         }
+        $times{$_} = time() - $time_start;
+
         $self->{mu}->record( "test_$_ END" );
         print "Finished test_$_\n";
     }
 
-    return \%returns;
+    return \%returns, \%times;
 }
 
 
@@ -138,6 +153,8 @@ sub test_twig{
 
     # This is important to free memory - let's see how much memory we actually used.
     $self->{mu}->record( 'test_twig just before purge' );
+
+    # Important to purge at the end to free up memory
     $twig->purge();
 
     $fh->close();
@@ -146,11 +163,29 @@ sub test_twig{
 sub parse_filme{
     my( $t, $section ) = @_;
     my $line = undef;
+    my %found;
+    $found{Nr} = $section->first_child( 'Nr' );
+    if( ! $found{Nr} ){
+        warn( "No Nr found...\n" );
+        return undef;
+    }
+    foreach( qw/Sender Thema Titel/ ){
+        $found{$_} = $section->first_child( $_ );
+        if( ! $found{$_} ){
+            warn( "Something missing for entry " . $found{Nr}->text() . "\n" );
+            return undef;
+        }
+    }
+
     printf { $t->{tester_fh} } $t->{tester_out_fmt},
-      $section->first_child( 'Nr' )->text(),
-      $section->first_child( 'Sender' )->text(),
-      $section->first_child( 'Thema' )->text(),
-      $section->first_child( 'Titel' )->text();
+      $found{Nr}->text(),
+      $found{Sender}->text(),
+      $found{Thema}->text(),
+      $found{Titel}->text();
+
+    # Purge the section
+    # Always purg the twigs you are finished with, otherwise memory usage will balloon!!!
+    $section->purge();
 }
 
 
@@ -213,7 +248,7 @@ sub test_xmlparser{
             if( $hash{Nr} and $hash{Sender} and $hash{Thema} and $hash{Titel} ){
                 printf $fh $self->{out_fmt}, $hash{Nr}, $hash{Sender},$hash{Thema}, $hash{Titel};
             }else{
-                print "Missing fields for $hash{Nr}\n";
+                warn( "Something missing for entry " . $hash{Nr} . "\n" );
             }
         }
         $idx++;
@@ -225,6 +260,35 @@ sub test_xmlparser{
 
 sub mu{
     my $self = shift;
+    if( ! $self->{mu} ){
+        if( $self->{use_mu} == 1 ){
+            $self->{mu} = Memory::Usage->new();
+        }else{
+            $self->{mu} = MemoryUsageStub->new();
+        }
+    }
     return $self->{mu};
 }
+
+
+
+package MemoryUsageStub;
+use strict;
+use warnings;
+
+sub new{
+    my $class = shift;
+    my $self = {};
+    bless $self, $class;
+    return $self;
+}
+
+sub record{
+    # Do nothing - just a stub
+}
+
+sub report{
+    return "Using MemoryUsageStub - no report available!\n";
+}
+
 1;

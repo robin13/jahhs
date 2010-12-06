@@ -1,0 +1,41 @@
+Report for XML processing carried out on ./sample_huge.xml
+  time    vsz (  diff)    rss (  diff) shared (  diff)   code (  diff)   data (  diff)
+     0  11956 ( 11956)  10236 ( 10236)   1636 (  1636)      4 (     4)   8696 (  8696) XMLTester START
+     0  11956 (     0)  10240 (     4)   1640 (     4)      4 (     0)   8696 (     0) test_xmlparser START
+    25  518488 ( 506532)  516760 ( 506520)   1768 (   128)      4 (     0)  515208 ( 506512) test_xmlparser just before end
+    27  514388 ( -4100)  512664 ( -4096)   1768 (     0)      4 (     0)  511108 ( -4100) test_xmlparser END
+
+Times:
+xmlparser  26.57887s (  100.0%)
+
+
+Report for XML processing carried out on ./sample_huge.xml
+  time    vsz (  diff)    rss (  diff) shared (  diff)   code (  diff)   data (  diff)
+     0  11956 ( 11956)  10236 ( 10236)   1636 (  1636)      4 (     4)   8696 (  8696) XMLTester START
+     0  11956 (     0)  10240 (     4)   1640 (     4)      4 (     0)   8696 (     0) test_simple START
+    76  640224 ( 628268)  635652 ( 625412)   2240 (   600)      4 (     0)  635492 ( 626796) test_simple END
+
+Times:
+simple     76.01389s (  100.0%)
+
+
+Report for XML processing carried out on ./sample_huge.xml
+  time    vsz (  diff)    rss (  diff) shared (  diff)   code (  diff)   data (  diff)
+     0  11956 ( 11956)  10236 ( 10236)   1636 (  1636)      4 (     4)   8696 (  8696) XMLTester START
+     0  11956 (     0)  10240 (     4)   1640 (     4)      4 (     0)   8696 (     0) test_twig START
+   133  12928 (   972)  11252 (  1012)   1776 (   136)      4 (     0)   9648 (   952) test_twig just before purge
+   133  12928 (     0)  11252 (     0)   1776 (     0)      4 (     0)   9648 (     0) test_twig END
+
+Times:
+twig       132.81988s (  100.0%)
+
+
+Report for XML processing carried out on ./sample_huge.xml
+  time    vsz (  diff)    rss (  diff) shared (  diff)   code (  diff)   data (  diff)
+     0  11956 ( 11956)  10236 ( 10236)   1636 (  1636)      4 (     4)   8696 (  8696) XMLTester START
+     0  11956 (     0)  10240 (     4)   1640 (     4)      4 (     0)   8696 (     0) test_smart START
+   393  1348560 ( 1336604)  1346808 ( 1336568)   1672 (    32)      4 (     0)  1345280 ( 1336584) test_smart just before end
+   395  1346504 ( -2056)  1344760 ( -2048)   1672 (     0)      4 (     0)  1343224 ( -2056) test_smart END
+
+Times:
+smart      394.91357s (  100.0%)

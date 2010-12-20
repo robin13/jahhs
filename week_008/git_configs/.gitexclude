@@ -1,0 +1,12 @@
+*~
+_*
+*.a
+build/*
+*.dll
+*.exe
+*.o
+*.sl
+*.so
+*.swp
+tmp/*
+lost+found/*

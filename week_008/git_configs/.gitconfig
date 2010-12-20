@@ -1,0 +1,26 @@
+[core]
+        pager = less
+        excludesfile = ~/.gitexclude
+	editor = emacs
+
+[user]
+        name = Your Name
+        email = your.name@example.com
+
+[format]
+        pretty = format:%h %ci %s
+
+[diff]
+        tool = meld
+
+[difftool]
+        prompt = false
+
+[merge]
+        tool = meld
+
+[mergetool]
+        prompt = false
+
+[color]
+	ui = true

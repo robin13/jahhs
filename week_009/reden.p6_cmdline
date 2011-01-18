@@ -1,0 +1,203 @@
+say "Hello World"
+Hello World
+> "Hello World"
+Hello World
+> 394830
+394830
+> 1 + 4
+5
+> (1 + 4).perl
+5
+> ("hello").perl
+"hello"
+>   +"123"
+123
+>   (+"123").perl
+123
+>   (~"123").perl
+"123"
+>   (@"123").perl
+Non-declarative sigil is missing its name at line 1, near "@\"123\").pe"
+>   (@("123")).perl
+("123")
+> "123".say
+123
+> my $variable = "hallo"
+hallo
+> $variable.say
+hallo
+> .say given "hallo"
+hallo
+> my %hash = hallo => "bar";
+hallo	bar
+
+> %hash<hallo>
+bar
+> %hash<bye> = "baz"
+baz
+> %hash<hallo bye>
+bar baz
+> <hallo bye>
+hallo bye
+> <hallo bye>.perl
+("hallo", "bye")
+> %hash.perl
+{"hallo" => "bar", "bye" => "baz"}
+> %hash<array> = ['foo', 'bar'];
+foo bar
+> %hash<array>.[0]
+foo
+> %hash<array>[0]
+foo
+> 1..10
+1 2 3 4 5 6 7 8 9 10
+> 5.5 ~~ 1..10
+Bool::True
+> (1..10).WHAT
+Range()
+> (1..10).WHICH
+104055328
+> (1..^10)
+1 2 3 4 5 6 7 8 9
+> (1^..^10)
+2 3 4 5 6 7 8 9
+> [^10]
+0 1 2 3 4 5 6 7 8 9
+> ^10.perl
+0 1 2 3 4 5 6 7 8 9
+> ^10.WHAT
+
+> (^10).WHAT
+Range()
+> 10..0
+
+> 10,9...0
+10 9 8 7 6 5 4 3 2 1 0
+> 10,8...0
+10 8 6 4 2 0
+> (10,2...0).perl
+(10,2...0).WHAT
+(10,2...0).WHAT
+## ERROR!!!!
+> 1,1.1, 1.2,1.3 ... 2 
+1 1.1 1.2 1.3 1.4 1.5 1.6 1.7 1.8 1.9 2
+> 1,sub ($arg){$arg + 1} ... 5
+1 2 3 4 5
+> sub concat(Str $x, Str $y --> Str){  return $x ~ $y;}
+concat
+> say concat("foo", "bar");
+foobar
+> say concat("foo", 1); # Boom
+Nominal type check failed for parameter '$y'; expected Str but got Int instead
+> sub divide_maybe(Int $x, Int $y = 1){ return $x/$y; }
+divide_maybe
+> say divide_maybe(1, 3);
+0.333333333333333
+> say divide_maybe(1);
+1
+> say divide_maybe(1, 3).WHAT
+Rat()
+> say divide_maybe(1,0);
+Inf
+> sub divideInfSave(Int $x, Int $y where{$y != 0}){return $x/$y;}
+divideInfSave
+> say divideInfSave(1,0); # Boom
+Constraint type check failed for parameter '$y'
+> sub probability(Int $total, Int $token where{0 != $total > $token} ){ return $token/$total;}
+probability
+> say probability(10, 5);;say probability(0, 5); # Boom;say probability(2, 5); # Boom;
+0.5
+Constraint type check failed for parameter '$token'
+> say probability(10, 5);
+0.5
+> say probability(10, 5);
+0.5
+> say probability(0, 5); # Boom
+Constraint type check failed for parameter '$token'
+> say probability(2, 5); # Boom
+Constraint type check failed for parameter '$token'
+> multi sub sayWhatYouGot (Int $num where{ $num % 2} ){  say "got the odd number: $num";}
+sayWhatYouGot
+> multi sub sayWhatYouGot (Int $num where{not( $num % 2)} ){  say "got the even number: $num";}
+sayWhatYouGot
+> multi sub sayWhatYouGot (Str $arg){say "got a String: $arg";}
+sayWhatYouGot
+> sayWhatYouGot("foo");
+got a String: foo
+> sayWhatYouGot(2); 
+got the even number: 2
+> sayWhatYouGot(3);
+got the odd number: 3
+> multi sub sayWhatYouGot ($arg){say "got Something {$arg.WHAT}";}
+sayWhatYouGot
+> sayWhatYouGot(True);
+got Something Bool()
+> sub infix:<±> (Int $l, Int $r){  return $l + (-$r|$r);}
+infix:<±>
+> sub postfix:<²> (Int $arg){  return $arg ** 2;}
+postfix:<²>
+> sub prefix:<√> (Int $arg){  return sqrt($arg);}
+prefix:<√>
+> say "1±2: {1±2}; √2: { √2}; 2²: { 2²}";
+1±2: any(-1, 3); √2: 1.4142135623731; 2²: 4
+> sub circumfix:<“ ”> ($content){ say $content;}
+circumfix:<“ ”>
+> “"Hello World"”;
+Could not find sub circumfix:<“ ”>
+> sub circumfix:<“ ”> ($content){ say $content;}
+circumfix:<“ ”>
+> “"Hello World"”;
+Could not find sub circumfix:<“ ”>
+> my &foo = sub ($arg){say $arg}
+_block1598
+> foo("hallo") 
+hallo
+> my &foo = -> $arg {say $arg}
+_block1672
+> foo("hallo") 
+hallo
+> my &foo = -> Int $arg {say $arg}
+_block1748
+> foo("hallo") 
+Nominal type check failed for parameter '$arg'; expected Int but got Str instead
+> my &foo =  {say $^arg}
+_block1824
+> foo("hallo") 
+hallo
+> my &foo =  {say $^arg2}
+_block1898
+> foo("hallo", 1)
+Too many positional parameters passed; got 2 but expected 1
+> foo("hallo",1)
+Too many positional parameters passed; got 2 but expected 1
+> my &foo =  {say $^barg, $^arg2}
+_block2000
+> foo("hallo",1)
+1hallo
+> my &foo =  {say $^æſðđ€ł, $^arg2}
+Unable to parse blockoid, couldn't find final '}' at line 1
+> my &foo =  {say $^æ , $^arg2}
+_block2078
+> foo("hallo",1)
+1hallo
+> 
+for 1,1, *+*...* -> $a {say $a; last if $a > 100}
+1
+1
+2
+3
+5
+8
+13
+21
+34
+55
+89
+144
+> * * * ** * 
+_block243
+> * * * ** *(1,2,3)
+_block305
+> (* * * ** *)(1,2,3)
+8
+> 
